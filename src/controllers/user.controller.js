@@ -1,14 +1,31 @@
 const bcrypt = require('bcryptjs');
 const { user } = require('../models/master');
 const { response, logger } = require('../utils');
-const { parseMySQLError } = require('../utils/helper');
+const { parseMySQLError, parseSequelizeQuery } = require('../utils/helper');
+
+let userFields = [];
+for (let key in user.getAttributes()) {
+  userFields.push(key);
+}
+userFields = userFields.filter((field) => field.toLowerCase() !== 'password');
 
 module.exports = {
   get: async (req, res) => {
     try {
-      const users = await user.findAll();
+      const { data, count } = parseSequelizeQuery({
+        model: user,
+        query: req.query,
+        excludes: [
+          'password',
+          'profilePic',
+          'lastChangePassword',
+          'createdAt',
+          'updatedAt',
+        ],
+        defaultSort: 'userId',
+      });
 
-      response.success(res, users);
+      response.success(res, await data, await count);
     } catch (error) {
       const ERROR_MSG = parseMySQLError(error);
 
