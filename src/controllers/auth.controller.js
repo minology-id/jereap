@@ -72,4 +72,34 @@ module.exports = {
       response.error(res, error.message);
     }
   },
+  logout: async (req, res) => {
+    try {
+      const { signedCookies = {} } = req;
+      const { refreshToken } = signedCookies;
+
+      if (refreshToken) {
+        const payload = jwt.verify(refreshToken, process.env.RT_SECRET);
+        const { userId } = payload;
+
+        const token = await session.findOne({
+          where: { [Op.and]: [{ userId }, { refreshToken: refreshToken }] },
+          logging: false,
+        });
+
+        if (!token) {
+          throw Error('Invalid refreshToken');
+        } else {
+          await token.destroy();
+
+          res.clearCookie('refreshToken', COOKIE_OPTIONS);
+          response.success(res, true);
+        }
+      } else {
+        throw Error(`Can't find token`);
+      }
+    } catch (error) {
+      logger.error(error);
+      response.error(res, error.message);
+    }
+  },
 };

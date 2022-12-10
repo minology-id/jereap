@@ -4,6 +4,8 @@ const ac = new roleAcl();
 
 // Administrator access control list
 ac.grant('administrator')
+  .execute('read')
+  .on('user')
   .execute('create')
   .on('user')
   .execute('update')

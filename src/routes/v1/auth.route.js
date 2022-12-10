@@ -18,4 +18,6 @@ router.route('/refreshToken').post(controller.auth.refreshToken);
 
 router.route('/me').get(verifyUser, controller.auth.me);
 
+router.route('/logout').get(verifyUser, controller.auth.logout);
+
 module.exports = router;
