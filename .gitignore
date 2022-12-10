@@ -7,3 +7,8 @@ node_modules
 
 # Logs
 logs
+
+# file inside static folder
+static/*.*
+static/files/*.*
+static/images/*.*

@@ -89,7 +89,8 @@ module.exports = {
         if (!token) {
           throw Error('Invalid refreshToken');
         } else {
-          await token.destroy();
+          token.destroy();
+          await token.save();
 
           res.clearCookie('refreshToken', COOKIE_OPTIONS);
           response.success(res, true);
@@ -99,6 +100,7 @@ module.exports = {
       }
     } catch (error) {
       logger.error(error);
+      res.clearCookie('refreshToken', COOKIE_OPTIONS);
       response.error(res, error.message);
     }
   },
