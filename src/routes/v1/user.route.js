@@ -27,6 +27,14 @@ router
   );
 
 router
+  .route('/')
+  .delete(
+    verifyUser,
+    permission.check('delete', 'user'),
+    controller.user.delete
+  );
+
+router
   .route('/update-password')
   .post(
     verifyUser,

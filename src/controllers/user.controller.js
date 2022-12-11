@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
+
 const { user } = require('../models/master');
 const { response, logger } = require('../utils');
 const { parseMySQLError, parseSequelizeQuery } = require('../utils/helper');
@@ -77,6 +79,26 @@ module.exports = {
       );
 
       response.success(res, true);
+    } catch (error) {
+      const ERROR_MSG = parseMySQLError(error);
+
+      logger.error(ERROR_MSG);
+      response.error(res, ERROR_MSG);
+    }
+  },
+  delete: async (req, res) => {
+    try {
+      const { userId } = req.body;
+
+      await user.destroy({
+        where: {
+          userId: {
+            [Op.in]: userId,
+          },
+        },
+      });
+
+      response.success(res, userId.length);
     } catch (error) {
       const ERROR_MSG = parseMySQLError(error);
 
