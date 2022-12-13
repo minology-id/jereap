@@ -66,19 +66,20 @@ module.exports = {
       const { userId } = req.params;
       const { firstName, lastName, email, roleId } = req.body;
 
-      const updated = await user.update(
-        {
-          firstName,
-          lastName,
-          email,
-          roleId,
-          updatedAt: Date.now(),
-          updatedBy: editor,
-        },
-        { where: { userId } }
-      );
+      const current = await user.findOne({ where: { userId } });
 
-      response.success(res, true);
+      current.update({
+        firstName,
+        lastName,
+        email,
+        roleId,
+        updatedAt: Date.now(),
+        updatedBy: editor,
+      });
+
+      await current.save();
+
+      response.success(res, current);
     } catch (error) {
       const ERROR_MSG = parseMySQLError(error);
 
@@ -146,7 +147,7 @@ module.exports = {
         currentUser.updatedBy = editor;
         await currentUser.save();
 
-        response.success(res, true);
+        response.success(res, currentUser);
       } else {
         throw Error(`Can't disable own user!`);
       }

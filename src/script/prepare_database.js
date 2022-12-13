@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 const mysql = require('mysql2/promise');
 
 const db = require('../utils/db');
@@ -36,6 +36,7 @@ const createTable = async () => {
   console.log(`Create all tables if not exists...`);
   const t = await db.transaction();
   try {
+    // array of sequelize models
     const models = [eventLogger, role, session, status, user];
     const storedPromised = models.map((model) => {
       return model.sync({ transaction: t, alter: true });

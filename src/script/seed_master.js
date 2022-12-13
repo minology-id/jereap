@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 const { db, logger } = require('../utils');
 
 const { master: tableMaster } = require('../models');
@@ -9,6 +9,7 @@ const main = async () => {
   try {
     await tableMaster.role.bulkCreate(seedMaster.role, { transaction: t });
     await tableMaster.status.bulkCreate(seedMaster.status, { transaction: t });
+    await tableMaster.user.bulkCreate(seedMaster.user, { transaction: t });
 
     await t.commit();
     logger.info('Master Table has been seeded!');
