@@ -66,12 +66,5 @@ module.exports = db.define(
         exclude: ['password'],
       },
     },
-    scope: {
-      withSecretColumns: {
-        attributes: {
-          include: ['password'],
-        },
-      },
-    },
   }
 );

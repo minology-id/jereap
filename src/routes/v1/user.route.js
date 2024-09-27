@@ -19,6 +19,7 @@ router
 
 router
   .route('/:userId')
+  .get(verifyUser, permission.check('read', 'user'), controller.user.getById)
   .put(
     verifyUser,
     permission.check('update', 'user'),

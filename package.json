@@ -1,10 +1,10 @@
 {
   "name": "jereap",
   "version": "0.0.1",
+  "license": "MIT",
   "description": "Jepara Rest API boilerplate - starter kit - skeleton",
   "main": "src/index.js",
   "author": "M Sadam Sadewa <me@mssadewa.com>",
-  "license": "MIT",
   "private": false,
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha --recursive tests",
@@ -39,7 +39,7 @@
     "passport-local": "^1.0.0",
     "pm2": "^5.2.2",
     "role-acl": "^4.5.4",
-    "sequelize": "^6.25.8",
+    "sequelize": "^6.27.0",
     "winston": "^3.8.2",
     "winston-transport": "^4.5.0",
     "xss-clean": "^0.1.1"

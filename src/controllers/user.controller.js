@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 
-const { user } = require('../models/master');
+const { user, role, status } = require('../models/master');
 const { response, logger } = require('../utils');
 const { parseMySQLError, parseSequelizeQuery } = require('../utils/helper');
 
@@ -25,9 +25,25 @@ module.exports = {
           'updatedAt',
         ],
         defaultSort: 'userId',
+        includes: [{ model: role }, { model: status }],
       });
 
       response.success(res, await data, await count);
+    } catch (error) {
+      console.error(error);
+      const ERROR_MSG = parseMySQLError(error);
+
+      logger.error(ERROR_MSG);
+      response.error(res, ERROR_MSG);
+    }
+  },
+  getById: async (req, res) => {
+    try {
+      const { userId } = req.params;
+
+      const result = await user.findOne({ where: { userId } });
+
+      response.success(res, result);
     } catch (error) {
       const ERROR_MSG = parseMySQLError(error);
 

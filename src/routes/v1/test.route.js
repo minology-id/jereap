@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-router.route('/').get((req, res, next) => {
-  res.send('Test route');
-});
+const { test } = require('../../controllers');
+
+router.route('/').get(test.test);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy,
   ExtractJwt = require('passport-jwt').ExtractJwt;
+const logger = require('../utils/logger');
 const { user, role, status } = require('../models/master');
 
 const opts = {};
@@ -38,6 +39,7 @@ passport.use(
         statusName: currentStatus?.statusName,
       });
     } catch (error) {
+      logger.error(error);
       return done(error, false);
     }
   })
